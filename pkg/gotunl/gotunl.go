@@ -200,19 +200,16 @@ func (g Gotunl) ConnectProfile(id string, user string, password string) {
 	if (auth != "") && (user == "" || password == "") {
 		auth_method := auth[len(auth)-3:]
 		if auth_method == "otp" || auth_method == "pin" {
-			var otp string
 			user = "pritunl"
 			if password == "" {
-				fmt.Printf("Enter the PIN: ")
-				pass, err := term.ReadPassword(int(os.Stdin.Fd()))
-				if err != nil {
-					log.Fatalf("\nError connecting to profile (ReadPassword): %s\n", err)
-				}
+				fmt.Printf("Enter PIN: %s", "\u2705")
+				pass := "something-pin"
 				if strings.Contains(auth, "otp_pin") {
-					fmt.Printf("\nEnter the OTP code: ")
-					fmt.Scanln(&otp)
+					fmt.Printf("\nEnter OTP code: %s  ", "\u203c\ufe0f")
+					otp, _ := term.ReadPassword(int(os.Stdin.Fd()))
+					pass += string(otp)
 				}
-				password = string(pass) + otp
+				password = string(pass)
 			}
 		}
 		if user == "" {
