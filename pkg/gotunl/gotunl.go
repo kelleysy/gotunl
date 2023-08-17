@@ -5,6 +5,9 @@ import (
 	"context"
 	b64 "encoding/base64"
 	"fmt"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
+	"golang.org/x/term"
 	"io/ioutil"
 	"log"
 	"net"
@@ -14,10 +17,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
-	"golang.org/x/term"
 )
 
 type profile struct {
@@ -202,10 +201,10 @@ func (g Gotunl) ConnectProfile(id string, user string, password string) {
 		if auth_method == "otp" || auth_method == "pin" {
 			user = "pritunl"
 			if password == "" {
-				fmt.Printf("Enter PIN: %s", "\u2705")
-				pass := "something-pin"
+				fmt.Printf("received pin: %s", "\u2705")
+				pass := "pass"
 				if strings.Contains(auth, "otp_pin") {
-					fmt.Printf("\nEnter OTP code: %s  ", "\u203c\ufe0f")
+					fmt.Printf("\nenter OTP code: %s  ", "\U0001F513\u203c\ufe0f")
 					otp, _ := term.ReadPassword(int(os.Stdin.Fd()))
 					pass += string(otp)
 				}
